@@ -10,6 +10,7 @@ import Streams from "./pages/Streams";
 import StreamOverview from "./pages/StreamOverview";
 import Quiz from "./pages/Quiz";
 import Results from "./pages/Results";
+import Documentation from "./pages/Documentation";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ const App = () => (
             <Route path="/stream/:streamId" element={<StreamOverview />} />
             <Route path="/quiz" element={<Quiz />} />
             <Route path="/results" element={<Results />} />
+            <Route path="/documentation" element={<Documentation />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
