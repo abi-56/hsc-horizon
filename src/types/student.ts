@@ -2,6 +2,8 @@ export interface StudentDetails {
   name: string;
   hscStream: 'science' | 'commerce' | 'arts' | '';
   hscSubjects: 'pcm' | 'pcb' | 'commerce' | 'humanities' | '';
+  educationLevel: 'hsc' | 'ug' | 'pg' | '';
+  interest: string;
   academicStrength: 'theory' | 'practical' | 'analytical' | '';
   areaOfInterest: 'technology' | 'medical' | 'management' | 'creative' | 'research' | '';
   careerGoal: 'job' | 'research' | 'entrepreneurship' | 'higher-studies' | '';
@@ -14,6 +16,8 @@ export interface QuizQuestion {
     text: string;
     category: StreamCategory;
   }[];
+  /** Which subjects/interests this question is relevant to (undefined = universal) */
+  relevantTo?: string[];
 }
 
 export type StreamCategory = 

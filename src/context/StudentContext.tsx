@@ -15,6 +15,8 @@ const defaultStudentDetails: StudentDetails = {
   name: '',
   hscStream: '',
   hscSubjects: '',
+  educationLevel: '',
+  interest: '',
   academicStrength: '',
   areaOfInterest: '',
   careerGoal: '',

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
 import QuizCard from '@/components/quiz/QuizCard';
-import { quizQuestions } from '@/data/quizQuestions';
+import { getQuizQuestions } from '@/data/quizQuestions';
 import { useStudent } from '@/context/StudentContext';
 import { calculateRecommendation } from '@/utils/recommendations';
 import { Button } from '@/components/ui/button';
@@ -14,6 +14,8 @@ const Quiz: React.FC = () => {
   const navigate = useNavigate();
   const { studentDetails, quizAnswers, setQuizAnswer, setQuizResult } = useStudent();
   const [currentQuestion, setCurrentQuestion] = useState(0);
+
+  const quizQuestions = getQuizQuestions(studentDetails.hscSubjects);
 
   const handleSelectAnswer = (category: StreamCategory) => {
     setQuizAnswer(quizQuestions[currentQuestion].id, category);
