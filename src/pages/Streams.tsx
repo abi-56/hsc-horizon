@@ -1,13 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
 import StreamCard from '@/components/streams/StreamCard';
 import { streams } from '@/data/streams';
+import { useStudent } from '@/context/StudentContext';
+import { getFilteredStreams } from '@/utils/streamFilter';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Compass } from 'lucide-react';
 
 const Streams: React.FC = () => {
   const navigate = useNavigate();
+  const { studentDetails } = useStudent();
+  const [showAll, setShowAll] = useState(false);
+
+  const hasFilters = !!studentDetails.hscStream;
+  const filteredStreams = getFilteredStreams(streams, studentDetails);
+  const displayedStreams = showAll ? streams : filteredStreams;
 
   return (
     <Layout>
@@ -22,13 +30,25 @@ const Streams: React.FC = () => {
               Explore Higher Studies Streams
             </h1>
             <p className="text-lg text-muted-foreground">
-              Discover various career paths, understand eligibility criteria, duration, and career opportunities.
+              {hasFilters && !showAll
+                ? `Showing streams relevant to your ${studentDetails.hscStream} background`
+                : 'Discover various career paths, understand eligibility criteria, duration, and career opportunities.'}
             </p>
+            {hasFilters && (
+              <Button
+                variant="outline"
+                size="sm"
+                className="mt-4"
+                onClick={() => setShowAll(!showAll)}
+              >
+                {showAll ? 'Show Recommended Streams' : 'View All Streams'}
+              </Button>
+            )}
           </div>
 
           {/* Stream Cards Grid */}
           <div className="mb-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {streams.map((stream, index) => (
+            {displayedStreams.map((stream, index) => (
               <div
                 key={stream.id}
                 className="animate-slide-up"

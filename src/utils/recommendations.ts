@@ -67,9 +67,6 @@ const generateExplanation = (
     explanation += `Your Arts background is well-suited for this stream. `;
   }
 
-  if (details.interest) {
-    explanation += `Your interest in ${details.interest} aligns well with this stream. `;
-  }
 
   explanation += `\n\nThis stream offers excellent career prospects in ${stream.careers.slice(0, 3).join(', ')}, and more. `;
   explanation += `You can start with courses like ${stream.courses.slice(0, 2).join(' or ')}.`;

@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { ArrowRight, User, GraduationCap, Heart } from 'lucide-react';
+import { ArrowRight, User, GraduationCap } from 'lucide-react';
 import { toast } from 'sonner';
 
 const StudentDetailsForm: React.FC = () => {
@@ -89,21 +89,6 @@ const StudentDetailsForm: React.FC = () => {
             <SelectItem value="arts">Arts / Humanities</SelectItem>
           </SelectContent>
         </Select>
-      </div>
-
-      {/* Interest */}
-      <div className="space-y-2">
-        <Label className="flex items-center gap-2">
-          <Heart className="h-4 w-4" />
-          Your Interest Area
-        </Label>
-        <Input
-          type="text"
-          placeholder="E.g., Technology, Medicine, Business..."
-          value={studentDetails.interest}
-          onChange={(e) => updateField('interest', e.target.value)}
-          className="h-12"
-        />
       </div>
 
       <Button type="submit" size="lg" className="w-full group">
