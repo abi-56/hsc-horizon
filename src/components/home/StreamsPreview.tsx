@@ -57,9 +57,9 @@ const StreamsPreview: React.FC = () => {
           ))}
         </div>
 
-        <div className="text-center">
+        <div className="flex justify-center gap-4">
           <Button variant="outline" size="lg" onClick={() => navigate('/streams')}>
-            View All Streams
+            All Streams
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         </div>

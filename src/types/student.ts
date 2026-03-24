@@ -2,7 +2,6 @@ export interface StudentDetails {
   name: string;
   hscStream: 'science' | 'commerce' | 'arts' | '';
   educationLevel: 'hsc' | 'ug' | 'pg' | '';
-  interest: string;
 }
 
 export interface QuizQuestion {

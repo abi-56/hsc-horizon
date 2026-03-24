@@ -15,7 +15,6 @@ const defaultStudentDetails: StudentDetails = {
   name: '',
   hscStream: '',
   educationLevel: '',
-  interest: '',
 };
 
 const StudentContext = createContext<StudentContextType | undefined>(undefined);
