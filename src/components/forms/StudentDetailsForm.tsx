@@ -11,9 +11,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { ArrowRight, User, GraduationCap, Heart, BookOpen } from 'lucide-react';
+import { ArrowRight, User, GraduationCap, Heart } from 'lucide-react';
 import { toast } from 'sonner';
-import { subjectInterests, courseProgression } from '@/data/interestsAndCourses';
 
 const StudentDetailsForm: React.FC = () => {
   const navigate = useNavigate();
@@ -22,7 +21,7 @@ const StudentDetailsForm: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!studentDetails.name || !studentDetails.hscStream || !studentDetails.areaOfInterest) {
+    if (!studentDetails.name || !studentDetails.hscStream) {
       toast.error('Please fill in all required fields');
       return;
     }
@@ -32,16 +31,8 @@ const StudentDetailsForm: React.FC = () => {
   };
 
   const updateField = (field: keyof typeof studentDetails, value: string) => {
-    const updates: Partial<typeof studentDetails> = { [field]: value };
-    // Reset interest when subjects change
-    if (field === 'hscSubjects') {
-      updates.interest = '';
-    }
-    setStudentDetails({ ...studentDetails, ...updates });
+    setStudentDetails({ ...studentDetails, [field]: value });
   };
-
-  const interests = studentDetails.hscSubjects ? subjectInterests[studentDetails.hscSubjects] || [] : [];
-  const courses = studentDetails.hscSubjects ? courseProgression[studentDetails.hscSubjects] : null;
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -100,141 +91,19 @@ const StudentDetailsForm: React.FC = () => {
         </Select>
       </div>
 
-      {/* HSC Subjects */}
+      {/* Interest */}
       <div className="space-y-2">
-        <Label>HSC Subjects Studied</Label>
-        <Select
-          value={studentDetails.hscSubjects}
-          onValueChange={(value) => updateField('hscSubjects', value)}
-        >
-          <SelectTrigger className="h-12">
-            <SelectValue placeholder="Select your subjects combination" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="pcm">PCM (Physics, Chemistry, Math)</SelectItem>
-            <SelectItem value="pcb">PCB (Physics, Chemistry, Biology)</SelectItem>
-            <SelectItem value="commerce">Commerce with Accounts/Economics</SelectItem>
-            <SelectItem value="humanities">Humanities / Liberal Arts</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      {/* Dynamic Interest Section — appears after subject is chosen */}
-      {interests.length > 0 && (
-        <div className="space-y-2 animate-slide-up">
-          <Label className="flex items-center gap-2">
-            <Heart className="h-4 w-4" />
-            Your Interest Area (based on your subjects)
-          </Label>
-          <Select
-            value={studentDetails.interest}
-            onValueChange={(value) => updateField('interest', value)}
-          >
-            <SelectTrigger className="h-12">
-              <SelectValue placeholder="Select your specific interest" />
-            </SelectTrigger>
-            <SelectContent>
-              {interests.map((item) => (
-                <SelectItem key={item.value} value={item.value}>
-                  {item.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      )}
-
-      {/* Course Progression Display */}
-      {courses && (
-        <div className="animate-slide-up rounded-xl bg-muted/50 p-4 space-y-3">
-          <h4 className="flex items-center gap-2 text-sm font-semibold text-foreground">
-            <BookOpen className="h-4 w-4 text-primary" />
-            Course Progression After HSC
-          </h4>
-          <div className="grid gap-3 sm:grid-cols-2">
-            <div>
-              <p className="mb-1.5 text-xs font-semibold uppercase tracking-wider text-primary">
-                After UG
-              </p>
-              <div className="flex flex-wrap gap-1.5">
-                {courses.ug.map((c) => (
-                  <span key={c} className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">
-                    {c}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <div>
-              <p className="mb-1.5 text-xs font-semibold uppercase tracking-wider text-accent">
-                After PG
-              </p>
-              <div className="flex flex-wrap gap-1.5">
-                {courses.pg.map((c) => (
-                  <span key={c} className="rounded-full bg-accent/10 px-2.5 py-1 text-xs font-medium text-accent-foreground">
-                    {c}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Academic Strength */}
-      <div className="space-y-2">
-        <Label>Academic Strength</Label>
-        <Select
-          value={studentDetails.academicStrength}
-          onValueChange={(value) => updateField('academicStrength', value)}
-        >
-          <SelectTrigger className="h-12">
-            <SelectValue placeholder="What's your learning style?" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="theory">Theory-based (Reading, Writing)</SelectItem>
-            <SelectItem value="practical">Practical (Hands-on, Labs)</SelectItem>
-            <SelectItem value="analytical">Analytical (Problem Solving)</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      {/* Area of Interest */}
-      <div className="space-y-2">
-        <Label>Area of Interest *</Label>
-        <Select
-          value={studentDetails.areaOfInterest}
-          onValueChange={(value) => updateField('areaOfInterest', value)}
-        >
-          <SelectTrigger className="h-12">
-            <SelectValue placeholder="What excites you the most?" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="technology">Technology & Innovation</SelectItem>
-            <SelectItem value="medical">Medical & Healthcare</SelectItem>
-            <SelectItem value="management">Business & Management</SelectItem>
-            <SelectItem value="creative">Creative & Design</SelectItem>
-            <SelectItem value="research">Research & Discovery</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      {/* Career Goal */}
-      <div className="space-y-2">
-        <Label>Career Goal</Label>
-        <Select
-          value={studentDetails.careerGoal}
-          onValueChange={(value) => updateField('careerGoal', value)}
-        >
-          <SelectTrigger className="h-12">
-            <SelectValue placeholder="What's your ultimate career goal?" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="job">Secure a Good Job</SelectItem>
-            <SelectItem value="research">Pursue Research</SelectItem>
-            <SelectItem value="entrepreneurship">Start My Own Business</SelectItem>
-            <SelectItem value="higher-studies">Pursue Higher Studies Abroad</SelectItem>
-          </SelectContent>
-        </Select>
+        <Label className="flex items-center gap-2">
+          <Heart className="h-4 w-4" />
+          Your Interest Area
+        </Label>
+        <Input
+          type="text"
+          placeholder="E.g., Technology, Medicine, Business..."
+          value={studentDetails.interest}
+          onChange={(e) => updateField('interest', e.target.value)}
+          className="h-12"
+        />
       </div>
 
       <Button type="submit" size="lg" className="w-full group">

@@ -15,7 +15,7 @@ const Quiz: React.FC = () => {
   const { studentDetails, quizAnswers, setQuizAnswer, setQuizResult } = useStudent();
   const [currentQuestion, setCurrentQuestion] = useState(0);
 
-  const quizQuestions = getQuizQuestions(studentDetails.hscSubjects);
+  const quizQuestions = getQuizQuestions();
 
   const handleSelectAnswer = (category: StreamCategory) => {
     setQuizAnswer(quizQuestions[currentQuestion].id, category);

@@ -190,10 +190,8 @@ const PresentationPage: React.FC = () => {
       x: 7, y: 1.5, w: 5.5, h: 0.5, fontSize: 18, bold: true, color: colors.accent,
     });
     const scoring = [
-      'HSC Subjects: +15–25 points',
+      'HSC Stream: +15–20 points',
       'Quiz Answers: +10 points each',
-      'Interest Match: +15 points',
-      'Career Goal Alignment: +10 pts',
       'Weighted total → Top 3 streams',
     ];
     scoring.forEach((s, i) => {
