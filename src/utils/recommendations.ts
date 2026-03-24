@@ -5,7 +5,6 @@ export const calculateRecommendation = (
   studentDetails: StudentDetails,
   quizAnswers: Record<number, StreamCategory>
 ): QuizResult => {
-  // Initialize scores
   const scores: Record<StreamCategory, number> = {
     engineering: 0,
     medical: 0,
@@ -20,7 +19,7 @@ export const calculateRecommendation = (
     scores[category] += 10;
   });
 
-  // Add weights based on student details
+  // Add weights based on HSC stream
   if (studentDetails.hscStream === 'science') {
     scores.engineering += 15;
     scores.medical += 15;
@@ -32,62 +31,6 @@ export const calculateRecommendation = (
     scores.creative += 15;
   }
 
-  // HSC subjects influence
-  if (studentDetails.hscSubjects === 'pcm') {
-    scores.engineering += 20;
-    scores.science += 10;
-  } else if (studentDetails.hscSubjects === 'pcb') {
-    scores.medical += 25;
-    scores.science += 10;
-  } else if (studentDetails.hscSubjects === 'commerce') {
-    scores.commerce += 20;
-  } else if (studentDetails.hscSubjects === 'humanities') {
-    scores.arts += 20;
-    scores.creative += 10;
-  }
-
-  // Area of interest influence
-  const interestMapping: Record<string, StreamCategory[]> = {
-    technology: ['engineering'],
-    medical: ['medical', 'science'],
-    management: ['commerce'],
-    creative: ['creative', 'arts'],
-    research: ['science', 'medical'],
-  };
-
-  if (studentDetails.areaOfInterest && interestMapping[studentDetails.areaOfInterest]) {
-    interestMapping[studentDetails.areaOfInterest].forEach((category) => {
-      scores[category] += 15;
-    });
-  }
-
-  // Academic strength influence
-  if (studentDetails.academicStrength === 'analytical') {
-    scores.engineering += 10;
-    scores.science += 10;
-    scores.commerce += 5;
-  } else if (studentDetails.academicStrength === 'practical') {
-    scores.engineering += 10;
-    scores.medical += 10;
-    scores.creative += 5;
-  } else if (studentDetails.academicStrength === 'theory') {
-    scores.arts += 10;
-    scores.science += 5;
-    scores.commerce += 5;
-  }
-
-  // Career goal influence
-  if (studentDetails.careerGoal === 'entrepreneurship') {
-    scores.commerce += 15;
-    scores.engineering += 5;
-  } else if (studentDetails.careerGoal === 'research') {
-    scores.science += 20;
-    scores.medical += 10;
-  } else if (studentDetails.careerGoal === 'higher-studies') {
-    scores.science += 10;
-    scores.engineering += 10;
-  }
-
   // Sort categories by score
   const sortedCategories = Object.entries(scores)
     .sort(([, a], [, b]) => b - a)
@@ -96,8 +39,6 @@ export const calculateRecommendation = (
   const primaryRecommendation = sortedCategories[0];
   const alternativeOptions = sortedCategories.slice(1, 3);
 
-  // Generate explanation
-  const primaryStream = streams.find((s) => s.id === primaryRecommendation);
   const explanation = generateExplanation(studentDetails, primaryRecommendation, scores);
 
   return {
@@ -118,31 +59,16 @@ const generateExplanation = (
 
   let explanation = `Based on your profile analysis, **${stream.name}** emerges as your ideal career path. `;
 
-  // Add specific reasoning
-  if (details.hscSubjects === 'pcm' && recommendation === 'engineering') {
-    explanation += `Your PCM background provides a strong foundation for engineering disciplines. `;
-  } else if (details.hscSubjects === 'pcb' && recommendation === 'medical') {
-    explanation += `Your PCB combination is perfectly aligned with medical studies. `;
+  if (details.hscStream === 'science' && (recommendation === 'engineering' || recommendation === 'medical' || recommendation === 'science')) {
+    explanation += `Your Science background provides a strong foundation for this stream. `;
+  } else if (details.hscStream === 'commerce' && recommendation === 'commerce') {
+    explanation += `Your Commerce background aligns perfectly with this stream. `;
+  } else if (details.hscStream === 'arts' && (recommendation === 'arts' || recommendation === 'creative')) {
+    explanation += `Your Arts background is well-suited for this stream. `;
   }
 
-  if (details.areaOfInterest) {
-    const interestLabels: Record<string, string> = {
-      technology: 'technology and innovation',
-      medical: 'healthcare and medicine',
-      management: 'business and leadership',
-      creative: 'creativity and design',
-      research: 'research and discovery',
-    };
-    explanation += `Your interest in ${interestLabels[details.areaOfInterest] || details.areaOfInterest} aligns well with this stream. `;
-  }
-
-  if (details.academicStrength) {
-    const strengthLabels: Record<string, string> = {
-      analytical: 'analytical thinking abilities',
-      practical: 'hands-on learning approach',
-      theory: 'theoretical understanding',
-    };
-    explanation += `Your ${strengthLabels[details.academicStrength] || details.academicStrength} will be a valuable asset in this field. `;
+  if (details.interest) {
+    explanation += `Your interest in ${details.interest} aligns well with this stream. `;
   }
 
   explanation += `\n\nThis stream offers excellent career prospects in ${stream.careers.slice(0, 3).join(', ')}, and more. `;

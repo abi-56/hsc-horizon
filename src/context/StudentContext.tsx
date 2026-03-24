@@ -14,12 +14,8 @@ interface StudentContextType {
 const defaultStudentDetails: StudentDetails = {
   name: '',
   hscStream: '',
-  hscSubjects: '',
   educationLevel: '',
   interest: '',
-  academicStrength: '',
-  areaOfInterest: '',
-  careerGoal: '',
 };
 
 const StudentContext = createContext<StudentContextType | undefined>(undefined);
